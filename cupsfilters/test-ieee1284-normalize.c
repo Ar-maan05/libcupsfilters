@@ -18,6 +18,20 @@ main(void)
   char	buffer[1024];	// Make/model buffer
   char	*model = NULL;	// Pointer to model name
   char	*res;		// Result pointer
+  int	i;		// Looping var
+  static const struct
+  {
+    const char	*input;	// Make and model string
+    const char	*model;	// Expected model name
+  } models[] =
+  {
+    { "Konica Minolta bizhub C258", "bizhub C258" },
+    { "Fuji Xerox DocuPrint C3200", "DocuPrint C3200" },
+    { "Kyocera Mita FS-1020D", "FS-1020D" },
+    { "Lexmark International MS310", "MS310" },
+    { "Epson Stylus Photo", "Stylus Photo" },
+    { "Brother HL-2270 DW printer", "HL-2270 DW printer" }
+  };
 
   //
   // Issue #214 regression test: empty MFG and MDL fields in IEEE-1284 device ID
@@ -86,6 +100,26 @@ main(void)
     printf("FAIL: MFG:HP;MDL:DeskJet; expected \"HP DeskJet\", got \"%s\"\n",
 	   res ? res : "NULL");
     return (1);
+  }
+
+  //
+  // Known makes with a space in their name, and ordinary names which only
+  // happen to have a space where those names would have one.
+  //
+
+  for (i = 0; i < (int)(sizeof(models) / sizeof(models[0])); i ++)
+  {
+    model = NULL;
+    res = cfIEEE1284NormalizeMakeModel(models[i].input, NULL,
+				       CF_IEEE1284_NORMALIZE_HUMAN, NULL,
+				       buffer, sizeof(buffer), &model, NULL,
+				       NULL);
+    if (!res || !model || strcmp(model, models[i].model))
+    {
+      printf("FAIL: \"%s\" expected model \"%s\", got \"%s\"\n",
+	     models[i].input, models[i].model, model ? model : "NULL");
+      return (1);
+    }
   }
 
   puts("PASS: cfIEEE1284NormalizeMakeModel issue #214 tests passed.");
