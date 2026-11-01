@@ -1007,19 +1007,19 @@ cfIEEE1284NormalizeMakeModel(
 	//
 
 	else if (strlen(buffer) >= 15 &&
-		 strncasecmp(buffer, "konica minolta", 14) &&
+		 !strncasecmp(buffer, "konica minolta", 14) &&
 		 isspace(buffer[14]))
 	  modelptr = buffer + 15;
 	else if (strlen(buffer) >= 11 &&
-		 strncasecmp(buffer, "fuji xerox", 10) &&
+		 !strncasecmp(buffer, "fuji xerox", 10) &&
 		 isspace(buffer[10]))
 	  modelptr = buffer + 11;
 	else if (strlen(buffer) >= 22 &&
-		 strncasecmp(buffer, "lexmark international", 21) &&
+		 !strncasecmp(buffer, "lexmark international", 21) &&
 		 isspace(buffer[21]))
 	  modelptr = buffer + 22;
 	else if (strlen(buffer) >= 13 &&
-		 strncasecmp(buffer, "kyocera mita", 12) &&
+		 !strncasecmp(buffer, "kyocera mita", 12) &&
 		 isspace(buffer[12]))
 	  modelptr = buffer + 13;
 
